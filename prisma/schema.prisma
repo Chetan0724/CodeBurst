@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  title       String
+  description String     @unique
+  language    Language
+  level       Difficulty
+  concepts    String[]
+  createdAt   DateTime   @default(now())
+}
+
+enum Language {
+  PYTHON
+  JAVASCRIPT
+  CPP
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
