@@ -1,7 +1,17 @@
+"use client";
+import { CardHoverEffect } from "@/components/Cards";
+import { FAQComp } from "@/components/FAQ";
+import { NavbarComp } from "@/components/Header";
+import { HeroHighlightComp } from "@/components/Hero";
+
 export default function Home() {
   return (
     <>
-      <h2>chetan yadav</h2>
+      <NavbarComp />
+      <HeroHighlightComp />
+      <CardHoverEffect />
+      <h2>💡 Frequently Asked Questions (FAQ)</h2>
+      <FAQComp />
     </>
   );
 }
