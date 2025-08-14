@@ -1,18 +1,63 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  type TSignupFormSchema,
+  SignupFormSchema,
+} from "@/lib/zod_schemas/signup.zod";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Image from "next/image";
+import { signUp } from "../../server/users";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function SignupForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted");
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<TSignupFormSchema>({
+    resolver: zodResolver(SignupFormSchema),
+  });
+
+  const onSubmit = async (data: TSignupFormSchema) => {
+    try {
+      const { resdata, ok } = await signUp(data);
+      if (ok) {
+        toast.success("User registered successfully!");
+      } else {
+        toast.error(resdata.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      reset();
+    }
   };
+
+  useEffect(() => {
+    if (
+      errors.fullname ||
+      errors.email ||
+      errors.password ||
+      errors.confirmPassword
+    ) {
+      toast.error(
+        errors.fullname?.message ||
+          errors.email?.message ||
+          errors.password?.message ||
+          errors.confirmPassword?.message
+      );
+    }
+  }, [errors]);
+
   return (
     <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
       <Image
@@ -25,26 +70,47 @@ export default function SignupForm() {
         Create your account to start learning.
       </p>
 
-      <form className="my-8" onSubmit={handleSubmit}>
+      <form className="my-8" onSubmit={handleSubmit(onSubmit)}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="fullname">Fullname</Label>
-          <Input id="fullname" placeholder="your full name" type="text" />
+          <Input
+            {...register("fullname")}
+            id="fullname"
+            placeholder="your full name"
+            type="text"
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="your@email.com" type="email" />
+          <Input
+            {...register("email")}
+            id="email"
+            placeholder="your@email.com"
+            type="email"
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="••••••••" type="password" />
+          <Input
+            {...register("password")}
+            id="password"
+            placeholder="••••••••"
+            type="password"
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="confirmpassword">Confirm Password</Label>
-          <Input id="confirmpassword" placeholder="••••••••" type="password" />
+          <Input
+            {...register("confirmPassword")}
+            id="confirmpassword"
+            placeholder="••••••••"
+            type="password"
+          />
         </LabelInputContainer>
 
         <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+          disabled={isSubmitting}
+          className="disabled:bg-red-600 group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
           type="submit"
         >
           Sign up &rarr;
