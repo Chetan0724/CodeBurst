@@ -1,18 +1,52 @@
 "use client";
-import React from "react";
+import { useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  type TLoginFormSchema,
+  LoginFormSchema,
+} from "@/lib/zod_schemas/login.zod";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Image from "next/image";
+import { signIn } from "../../server/users";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function SigninForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TLoginFormSchema>({
+    resolver: zodResolver(LoginFormSchema),
+  });
+
+  const onSubmit = async (data: TLoginFormSchema) => {
+    try {
+      const res = await signIn(data);
+      const { resdata, ok, status } = res;
+      console.log(resdata, ok, status);
+      if (ok) {
+        toast.success("Signin Successfully!");
+      } else {
+        toast.error(resdata?.message || "Signin failed");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("An unexpected error occurred. Please try again.");
+    }
   };
+
+  useEffect(() => {
+    if (errors.email || errors.password) {
+      toast(errors.email?.message || errors.password?.message);
+    }
+  }, [errors]);
+
   return (
     <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
       <Image
@@ -25,21 +59,31 @@ export default function SigninForm() {
         Welcome back! Sign in to continue your coding journey.
       </p>
 
-      <form className="my-8" onSubmit={handleSubmit}>
+      <form className="my-8" onSubmit={handleSubmit(onSubmit)}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="your@email.com" type="email" />
+          <Input
+            {...register("email")}
+            id="email"
+            placeholder="your@email.com"
+            type="email"
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="••••••••" type="password" />
+          <Input
+            {...register("password")}
+            id="password"
+            placeholder="••••••••"
+            type="password"
+          />
         </LabelInputContainer>
 
         <button
           className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
           type="submit"
         >
-          Sign up &rarr;
+          Sign in &rarr;
           <BottomGradient />
         </button>
 
