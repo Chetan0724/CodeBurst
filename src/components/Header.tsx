@@ -17,15 +17,15 @@ export function NavbarComp() {
   const navItems = [
     {
       name: "What we do",
-      link: "#what-we-do",
+      link: "what-we-do",
     },
     {
       name: "Try Demo",
-      link: "#demo",
+      link: "demo",
     },
     {
       name: "Contact",
-      link: "#contact",
+      link: "contact",
     },
   ];
 

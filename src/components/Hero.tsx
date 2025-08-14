@@ -21,7 +21,7 @@ export function HeroHighlightComp() {
         className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto "
       >
         You don&apos;t memorize code. You master it by doing. Each task in{" "}
-        <Highlight className="text-black dark:text-white">
+        <Highlight className="text-black dark:text-black">
           {"<CodeBurst>"}
         </Highlight>{" "}
         is a spark that sharpens your skill.

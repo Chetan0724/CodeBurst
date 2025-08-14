@@ -10,7 +10,6 @@ export default function Home() {
       <NavbarComp />
       <HeroHighlightComp />
       <CardHoverEffect />
-      <h2>💡 Frequently Asked Questions (FAQ)</h2>
       <FAQComp />
     </>
   );
