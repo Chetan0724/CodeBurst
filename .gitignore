@@ -43,5 +43,3 @@ next-env.d.ts
 /generated/prisma
 
 /src/generated/prisma
-
-/src/app/api/judge0
