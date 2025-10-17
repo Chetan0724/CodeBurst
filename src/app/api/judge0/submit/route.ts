@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
   try {
     const { language_id, source_code, stdin } = await req.json();
 
-    const url = `${process.env.RAPIDAPI_BASE_URL}/submissions?base64_encoded=true&wait=false&fields=*`;
+    const url = `${process.env.RAPIDAPI_BASE_URL}/submissions?base64_encoded=false&wait=false&fields=*`;
     const options = {
       method: "POST",
       headers: {

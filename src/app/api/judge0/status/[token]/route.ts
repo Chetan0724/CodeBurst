@@ -16,7 +16,20 @@ export async function GET(
     };
     const response = await fetch(url, options);
     const data = await response.json();
-    return NextResponse.json({ data }, { status: 200 });
+
+    const decode = (val?: string | null) =>
+      val ? Buffer.from(val, "base64").toString("utf-8") : val;
+
+    const decodedData = {
+      ...data,
+      source_code: decode(data.source_code),
+      stdout: decode(data.stdout),
+      stderr: decode(data.stderr),
+      compile_output: decode(data.compile_output),
+      message: decode(data.message),
+    };
+
+    return NextResponse.json({ data: decodedData }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error }, { status: 500 });
