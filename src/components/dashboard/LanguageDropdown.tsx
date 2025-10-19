@@ -9,12 +9,18 @@ import {
 } from "@/components/ui/select";
 import { useContext } from "react";
 import EditorContext from "@/context/EditorContext";
+import { tasksArray } from "@/lib/tasksData";
 
 const LanguageDropdown = () => {
-  const { language, setLanguage } = useContext(EditorContext)!;
+  const { language, setLanguage, setTasks } = useContext(EditorContext)!;
+
+  const handleValueChange = (value: string) => {
+    setLanguage(value);
+    setTasks(tasksArray.filter((task) => task.language === value));
+  };
 
   return (
-    <Select value={language} onValueChange={(value) => setLanguage(value)}>
+    <Select value={language} onValueChange={handleValueChange}>
       <SelectTrigger>
         <SelectValue placeholder="Programming Language" />
       </SelectTrigger>
