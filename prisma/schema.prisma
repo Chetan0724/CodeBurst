@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -26,25 +25,28 @@ model User {
 }
 
 model Task {
-  id          String     @id @default(uuid())
-  title       String
-  description String     @unique
-  language    Language
-  level       Difficulty
-  concepts    String[]
-  createdAt   DateTime   @default(now())
+  id             String     @id @default(uuid())
+  taskId         Int
+  topic          String
+  description    String
+  language       Language
+  difficulty     Difficulty
+  expectedOutput String
+  createdAt      DateTime   @default(now())
+
+  @@unique([taskId, language])
 }
 
 enum Language {
-  PYTHON
-  JAVASCRIPT
-  CPP
+  python
+  javascript
+  cpp
 }
 
 enum Difficulty {
-  EASY
-  MEDIUM
-  HARD
+  Easy
+  Medium
+  Hard
 }
 
 model Session {
