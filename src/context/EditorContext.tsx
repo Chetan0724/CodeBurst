@@ -17,6 +17,8 @@ interface IEditor {
   setCurrTaskId: Dispatch<SetStateAction<number>>;
   tasks: Task[];
   setTasks: Dispatch<SetStateAction<Task[]>>;
+  allTasks: Task[];
+  setAllTasks: Dispatch<SetStateAction<Task[]>>;
 }
 
 const EditorContext = createContext<IEditor | null>(null);

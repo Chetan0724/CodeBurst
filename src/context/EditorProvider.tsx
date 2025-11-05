@@ -1,13 +1,15 @@
 "use client";
 import EditorContext, { Task } from "./EditorContext";
 import { ReactNode, useState } from "react";
-import { tasksArray } from "@/lib/tasksData";
+import { tasksData } from "@/lib/api";
 
 const EditorProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguage] = useState<string>("javascript");
   const [currTaskId, setCurrTaskId] = useState<number>(1);
-  const langArr = tasksArray.filter((task) => task.language === language);
-  const [tasks, setTasks] = useState<Task[]>(langArr);
+  const [allTasks, setAllTasks] = useState<Task[]>(tasksData);
+  const [tasks, setTasks] = useState<Task[]>(
+    allTasks.filter((task) => task.language == "javascript")
+  );
 
   return (
     <EditorContext.Provider
@@ -18,6 +20,8 @@ const EditorProvider = ({ children }: { children: ReactNode }) => {
         setCurrTaskId,
         tasks,
         setTasks,
+        allTasks,
+        setAllTasks,
       }}
     >
       {children}
