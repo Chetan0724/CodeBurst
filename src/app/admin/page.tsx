@@ -2,9 +2,6 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-// import { auth } from "@/lib/auth";
-// import { headers } from "next/headers";
-// import { redirect } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -22,15 +19,16 @@ import {
 } from "@/lib/zod_schemas/task.zod";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const Admin = () => {
-  // const session = await auth.api.getSession({
-  //   headers: await headers(),
-  // });
+  const { data: session } = authClient.useSession();
+  const router = useRouter();
 
-  // if (!session) {
-  //   redirect("/signin");
-  // }
+  if (!session) {
+    router.replace("/signin");
+  }
 
   const {
     register,
@@ -38,7 +36,7 @@ const Admin = () => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<TTaskFormSchema>({
+  } = useForm({
     resolver: zodResolver(TaskFormSchema),
   });
 
@@ -72,6 +70,7 @@ const Admin = () => {
               id="topic"
               name="topic"
               placeholder="Enter topic name"
+              required
             />
           </div>
 
@@ -82,6 +81,7 @@ const Admin = () => {
               id="taskId"
               name="taskId"
               placeholder="Enter task ID"
+              required
             />
           </div>
 
@@ -137,6 +137,7 @@ const Admin = () => {
               id="description"
               name="description"
               className="min-h-[100px]"
+              required
             />
           </div>
 
@@ -146,6 +147,7 @@ const Admin = () => {
               {...register("expectedAnswer")}
               id="expectedAnswer"
               placeholder="Enter expected output"
+              required
             />
           </div>
 

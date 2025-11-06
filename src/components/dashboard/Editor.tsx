@@ -28,6 +28,12 @@ if __name__ == "__main__":
     main()"`,
 };
 
+export const languageIds: Record<string, number> = {
+  cpp: 54,
+  javascript: 63,
+  python: 71,
+};
+
 const EditorPage = () => {
   const [input, setInput] = useState("");
 
@@ -36,6 +42,23 @@ const EditorPage = () => {
   useEffect(() => {
     setInput(boilerplates[language]);
   }, [language]);
+
+  const handleSubmit = async () => {
+    const submitResponse = await fetch("/api/judge0/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        language_id: languageIds[language],
+        source_code: input,
+      }),
+    });
+
+    const { token } = await submitResponse.json();
+
+    const statusResponse = await fetch(`/api/judge0/status/${token}`);
+    const data = await statusResponse.json();
+    console.log(data);
+  };
 
   return (
     <Card>
@@ -52,7 +75,10 @@ const EditorPage = () => {
         ></Editor>
       </CardContent>
       <CardFooter>
-        <Button className="bg-green-600 text-white hover:text-black">
+        <Button
+          className="bg-green-600 text-white hover:text-black"
+          onClick={handleSubmit}
+        >
           Run Code
         </Button>
       </CardFooter>

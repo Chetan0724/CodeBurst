@@ -8,33 +8,48 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   fullName      String?
   password      String?
   avatarUrl     String?
-  email         String    @unique
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  email         String       @unique
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   name          String
   emailVerified Boolean
   image         String?
   sessions      Session[]
   accounts      Account[]
+  solvedTasks   SolvedTask[]
 
   @@map("user")
 }
 
 model Task {
-  id             String     @id @default(uuid())
+  id             String       @id @default(uuid())
   taskId         Int
   topic          String
   description    String
   language       Language
   difficulty     Difficulty
   expectedOutput String
-  createdAt      DateTime   @default(now())
+  createdAt      DateTime     @default(now())
+  solvedBy       SolvedTask[]
 
   @@unique([taskId, language])
+}
+
+model SolvedTask {
+  id        String   @id @default(uuid())
+  userId    String
+  taskId    String
+  language  Language
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, taskId, language])
 }
 
 enum Language {

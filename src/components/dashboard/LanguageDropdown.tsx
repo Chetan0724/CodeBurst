@@ -9,14 +9,14 @@ import {
 } from "@/components/ui/select";
 import { useContext } from "react";
 import EditorContext from "@/context/EditorContext";
-import { tasksArray } from "@/lib/tasksData";
 
 const LanguageDropdown = () => {
-  const { language, setLanguage, setTasks } = useContext(EditorContext)!;
+  const { language, setLanguage, setTasks, allTasks } =
+    useContext(EditorContext)!;
 
   const handleValueChange = (value: string) => {
     setLanguage(value);
-    setTasks(tasksArray.filter((task) => task.language === value));
+    setTasks(allTasks.filter((task) => task.language === value));
   };
 
   return (

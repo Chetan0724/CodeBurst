@@ -12,12 +12,10 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
 import { ModeToggle } from "./ThemeToggle";
-import { authClient } from "@/lib/auth-client";
 import ProfileDropdown from "./ProfileDropdown";
 import Link from "next/link";
 
-export function NavbarComp() {
-  const { data: session } = authClient.useSession();
+export function NavbarComp({ session }) {
   const navItems = [
     {
       name: "What we do",

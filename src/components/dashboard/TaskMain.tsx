@@ -18,8 +18,8 @@ const TaskMain = () => {
   const { currTaskId, tasks, setCurrTaskId, language } =
     useContext(EditorContext)!;
 
-  const currTaskMain = tasks.filter((task) => task.taskId == currTaskId);
-  const maxLengthArray = tasks.filter((task) => task.language == language);
+  const currTaskMain = tasks!.filter((task) => task.taskId == currTaskId);
+  const maxLengthArray = tasks!.filter((task) => task.language == language);
 
   return (
     <div>
