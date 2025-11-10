@@ -1,119 +1,62 @@
 "use client";
-import {
-  Navbar,
-  NavBody,
-  NavItems,
-  MobileNav,
-  NavbarLogo,
-  NavbarButton,
-  MobileNavHeader,
-  MobileNavToggle,
-  MobileNavMenu,
-} from "@/components/ui/resizable-navbar";
-import { useState } from "react";
 import { ModeToggle } from "./ThemeToggle";
-import ProfileDropdown from "./ProfileDropdown";
+import Image from "next/image";
 import Link from "next/link";
+import {
+  IconLayoutSidebarLeftCollapse,
+  IconLayoutSidebarLeftExpand,
+} from "@tabler/icons-react";
+import { useContext } from "react";
+import SidebarContext from "@/context/SidebarContext";
 
-export function NavbarComp({ session }) {
-  const navItems = [
-    {
-      name: "What we do",
-      link: "what-we-do",
-    },
-    {
-      name: "Try Demo",
-      link: "demo",
-    },
-    {
-      name: "Contact",
-      link: "contact",
-    },
-  ];
-
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export function Header() {
+  const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)!;
 
   return (
-    <div className="relative w-full">
-      {!session ? (
-        <Navbar>
-          {/* Desktop Navigation */}
-          <NavBody>
-            <NavbarLogo />
-            <NavItems items={navItems} />
-            <div className="flex items-center gap-4">
-              <NavbarButton href="/signin" variant="secondary">
-                Login
-              </NavbarButton>
-              <NavbarButton href="/signup" variant="primary">
-                Signup
-              </NavbarButton>
-              <ModeToggle />
-            </div>
-          </NavBody>
-          {/* Mobile Navigation */}
-          <MobileNav>
-            <MobileNavHeader>
-              <NavbarLogo />
-              <MobileNavToggle
-                isOpen={isMobileMenuOpen}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              />
-            </MobileNavHeader>
+    <header className="flex justify-between px-4 py-2 border-b bg-primarytwo sticky top-0 z-50">
+      <div
+        className="flex items-center gap-4"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        {isSidebarOpen ? (
+          <IconLayoutSidebarLeftCollapse
+            stroke={2}
+            className="bg-primarytwo border-2 p-0.5 rounded-full"
+          />
+        ) : (
+          <IconLayoutSidebarLeftExpand
+            stroke={2}
+            className="bg-primarytwo border-2 p-0.5 rounded-full"
+          />
+        )}
 
-            <MobileNavMenu
-              isOpen={isMobileMenuOpen}
-              onClose={() => setIsMobileMenuOpen(false)}
-            >
-              {navItems.map((item, idx) => (
-                <Link
-                  key={`mobile-link-${idx}`}
-                  href={item.link}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="relative text-neutral-600 dark:text-neutral-300"
-                >
-                  <span className="block">{item.name}</span>
-                </Link>
-              ))}
-              <div className="flex w-full flex-col gap-4">
-                <NavbarButton
-                  href="/signin"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  variant="primary"
-                  className="w-full"
-                >
-                  Login
-                </NavbarButton>
-                <NavbarButton
-                  href="/signup"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  variant="primary"
-                  className="w-full"
-                >
-                  Signup
-                </NavbarButton>
-              </div>
-            </MobileNavMenu>
-          </MobileNav>
-        </Navbar>
-      ) : (
-        <Navbar>
-          {/* Desktop Navigation */}
-          <NavBody>
-            <NavbarLogo />
-            <div className="flex items-center gap-4">
-              <ProfileDropdown />
-              <ModeToggle />
-            </div>
-          </NavBody>
-          <MobileNav>
-            <MobileNavHeader>
-              <NavbarLogo />
-              <ProfileDropdown />
-            </MobileNavHeader>
-          </MobileNav>
-        </Navbar>
-      )}
-    </div>
+        <Link href="/">
+          <Image
+            src="/logo_dark.svg"
+            alt="logo"
+            className="block dark:hidden"
+            width={120}
+            height={120}
+          />
+          <Image
+            src="/logo_light.svg"
+            alt="logo"
+            className="hidden dark:block"
+            width={120}
+            height={120}
+          />
+        </Link>
+      </div>
+      <div className="flex items-center gap-4">
+        <Link href="/signin">Login</Link>
+        <Link
+          href="/signup"
+          className="bg-black text-white dark:bg-white dark:text-black px-1.5"
+        >
+          Signup
+        </Link>
+        <ModeToggle />
+      </div>
+    </header>
   );
 }
