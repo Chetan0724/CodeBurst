@@ -8,10 +8,11 @@ const LeftBar = () => {
   const { tasks, setCurrTaskId } = useContext(EditorContext)!;
 
   return (
-    <div className="bg-primarytwo p-3 text-white top-36 border space-y-2.5 rounded-2xl">
-      <LanguageDropdown />
-      <hr />
-      <div className="space-y-2 overflow-y-auto h-[calc(100vh-15rem)]">
+    <aside className="bg-primarytwo text-white border-r fixed left-0 top-[3.25rem] bottom-0 flex flex-col p-3">
+      <div className="border-b shrink-0">
+        <LanguageDropdown />
+      </div>
+      <div className="space-y-2 flex-1 overflow-y-auto">
         {tasks!.map(({ taskId, difficulty, topic, language }) => (
           <div
             key={taskId + language}
@@ -22,7 +23,7 @@ const LeftBar = () => {
           </div>
         ))}
       </div>
-    </div>
+    </aside>
   );
 };
 
