@@ -100,6 +100,9 @@ const Admin = () => {
                       <SelectItem value="javascript">JavaScript</SelectItem>
                       <SelectItem value="python">Python</SelectItem>
                       <SelectItem value="cpp">C++</SelectItem>
+                      <SelectItem value="java">Java</SelectItem>
+                      <SelectItem value="go">Go</SelectItem>
+                      <SelectItem value="rust">Rust</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

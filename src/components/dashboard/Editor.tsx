@@ -26,12 +26,35 @@ main();`,
 
 if __name__ == "__main__":
     main()"`,
+
+  java: `public class Main {
+    public static void main(String[] args) {
+        // Write your code here
+        System.out.println("Hello, World!");
+    }
+}`,
+
+  go: `package main
+import "fmt"
+
+func main() {
+    // Write your code here
+    fmt.Println("Hello, World!")
+}`,
+
+  rust: `fn main() {
+    // Write your code here
+    println!("Hello, World!");
+}`,
 };
 
 export const languageIds: Record<string, number> = {
   cpp: 54,
   javascript: 63,
   python: 71,
+  java: 62,
+  go: 95,
+  rust: 73,
 };
 
 const EditorPage = () => {

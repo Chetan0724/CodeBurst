@@ -8,7 +8,7 @@ export const TaskFormSchema = z.object({
   taskId: z.coerce
     .number("Please enter a numeric Task ID (e.g., 16, 17, etc.)")
     .min(1, "Please enter a valid Task ID"),
-  language: z.enum(["javascript", "python", "cpp"], {
+  language: z.enum(["javascript", "python", "cpp", "java", "go", "rust"], {
     message: "Please select a programming language",
   }),
   difficulty: z.enum(["Easy", "Medium", "Hard"], {
