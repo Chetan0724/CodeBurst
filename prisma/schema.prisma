@@ -21,6 +21,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   solvedTasks   SolvedTask[]
+  role          String       @default("user")
 
   @@map("user")
 }

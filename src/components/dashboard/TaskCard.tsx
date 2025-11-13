@@ -19,7 +19,7 @@ const TaskCard = ({ taskId, difficulty, topic }: taskProps) => {
 
   return (
     <Card
-      className={currTaskId == taskId ? "border-2 border-white bg-border" : ""}
+      className={currTaskId == taskId ? "bg-border" : ""}
     >
       <CardHeader>
         <CardTitle>{`Task#${taskId}`}</CardTitle>
