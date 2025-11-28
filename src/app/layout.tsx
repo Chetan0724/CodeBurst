@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { NavbarComp } from "@/components/Header";
-import getsession from "@/lib/getsession";
 import Footer from "@/components/Footer";
 import EditorProvider from "@/context/EditorProvider";
+import SidebarProvider from "@/context/SidebarProvider";
+import { Header } from "@/components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,25 +28,26 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getsession();
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <EditorProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <NavbarComp session={session} />
-            {children}
-            <Footer />
-            <Toaster />
-          </ThemeProvider>
-        </EditorProvider>
+        <SidebarProvider>
+          <EditorProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Header />
+              <main className="mx-3 my-5">{children}</main>
+              <Footer />
+              <Toaster />
+            </ThemeProvider>
+          </EditorProvider>
+        </SidebarProvider>
       </body>
     </html>
   );

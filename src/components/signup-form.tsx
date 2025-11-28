@@ -59,7 +59,7 @@ export default function SignupForm() {
   }, [errors]);
 
   return (
-    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-primarytwo mt-32">
+    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-primarytwo">
       <Image
         src="/logo_light.svg"
         alt="CodeBurst_logo"

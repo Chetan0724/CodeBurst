@@ -10,10 +10,13 @@ const Profile = async () => {
   if (!session) {
     redirect("/signin");
   }
+
   return (
-    <div className="mt-36">
+    <div>
       <h2 className="text-3xl font-bold">Profile</h2>
-      <p className="text-xl text-neutral-500">Track your progress and achievements</p>
+      <p className="text-xl text-neutral-500">
+        Track your progress and achievements
+      </p>
     </div>
   );
 };

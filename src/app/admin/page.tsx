@@ -54,7 +54,7 @@ const Admin = () => {
   }, [errors]);
 
   return (
-    <div className="mt-36 flex justify-center px-4 sm:px-6">
+    <div className="flex justify-center px-4 sm:px-6">
       <div className="w-full max-w-2xl bg-primarytwo shadow-md rounded-2xl p-6 sm:p-8 border border-border">
         <h3 className="text-2xl sm:text-3xl font-bold text-center mb-6  sm:mb-8">
           Admin Panel

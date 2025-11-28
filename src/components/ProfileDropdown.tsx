@@ -1,5 +1,4 @@
-"use client";
-import { User } from "lucide-react";
+import { IconUserFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { signOut } from "../../server/users";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ const ProfileDropdown = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost">
-          <User />
+          <IconUserFilled />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">

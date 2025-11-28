@@ -99,7 +99,7 @@ const EditorPage = () => {
       </CardContent>
       <CardFooter>
         <Button
-          className="bg-green-600 text-white hover:text-black"
+          className="dark:text-black dark:bg-white"
           onClick={handleSubmit}
         >
           Run Code
