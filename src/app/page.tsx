@@ -1,9 +1,8 @@
 "use client";
-import { CardHoverEffect } from "@/components/Cards";
 export default function Home() {
   return (
     <>
-      <CardHoverEffect />
+      <h1>Good Morning, User!</h1>
     </>
   );
 }
