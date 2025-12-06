@@ -32,7 +32,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex justify-between px-4 py-2 border-b bg-primarytwo sticky top-0 z-50 h-13">
+    <header className="bg-primarytwo w-full border-b flex justify-between px-4 py-5 sm:px-8 sticky top-0 z-50 h-13">
       <div className="flex items-center gap-4">
         {pathname === "/dashboard" && (
           <button
@@ -72,7 +72,7 @@ export function Header() {
             <Link href="/signin">Login</Link>
             <Link
               href="/signup"
-              className="bg-black text-white dark:bg-white dark:text-black px-1.5"
+              className="bg-black text-white dark:bg-white dark:text-black px-1.5 py-0.5 rounded"
             >
               Signup
             </Link>

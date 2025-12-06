@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import Footer from "@/components/Footer";
 import EditorProvider from "@/context/EditorProvider";
 import SidebarProvider from "@/context/SidebarProvider";
 import { Header } from "@/components/Header";
@@ -42,8 +41,7 @@ export default async function RootLayout({
               disableTransitionOnChange
             >
               <Header />
-              <main className="mx-3 my-5">{children}</main>
-              <Footer />
+              <main>{children}</main>
               <Toaster />
             </ThemeProvider>
           </EditorProvider>

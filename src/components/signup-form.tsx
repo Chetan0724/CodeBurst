@@ -70,7 +70,7 @@ export default function SignupForm() {
         Create your account to start learning.
       </p>
 
-      <form className="my-8" onSubmit={handleSubmit(onSubmit)}>
+      <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="fullname">Fullname</Label>
           <Input
