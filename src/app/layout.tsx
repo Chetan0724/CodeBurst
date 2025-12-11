@@ -1,11 +1,12 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import EditorProvider from "@/context/EditorProvider";
 import SidebarProvider from "@/context/SidebarProvider";
 import { Header } from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,6 +15,12 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const dmMono = DM_Mono({
+  weight: "400",
+  variable: "--font-dmmono",
   subsets: ["latin"],
 });
 
@@ -30,7 +37,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${dmMono.variable} antialiased min-h-screen font-sans`}
       >
         <SidebarProvider>
           <EditorProvider>
@@ -42,6 +49,7 @@ export default async function RootLayout({
             >
               <Header />
               <main>{children}</main>
+              <Footer />
               <Toaster />
             </ThemeProvider>
           </EditorProvider>
