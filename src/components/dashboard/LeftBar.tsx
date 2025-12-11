@@ -28,11 +28,14 @@ const LeftBar = () => {
           <IconChevronLeft stroke={2} />
         </button>
       </div>
-      <div className="space-y-2 flex-1 overflow-y-auto p-3">
+      <div className="space-y-2 flex-1 overflow-y-auto p-3 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-black scrollbar-track-transparent dark:scrollbar-thumb-white">
         {tasks!.map(({ taskId, difficulty, topic, language }) => (
           <div
             key={taskId + language}
-            onClick={() => setCurrTaskId(taskId)}
+            onClick={() => {
+              setCurrTaskId(taskId);
+              setIsSidebarOpen(!isSidebarOpen);
+            }}
             className="cursor-pointer"
           >
             <TaskCard taskId={taskId} difficulty={difficulty} topic={topic} />

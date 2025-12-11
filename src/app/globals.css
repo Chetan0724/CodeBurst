@@ -1,5 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+  preferredstrategy: "pseudoelements";
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -88,7 +92,7 @@
 }
 
 .dark {
-  --background: oklch(0.1913 0 0);
+  --background: oklch(0.2264 0 0);
   --foreground: oklch(0.985 0.002 247.839);
 
   --primaryone: oklch(0.1913 0 0);
