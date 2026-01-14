@@ -1,47 +1,42 @@
 "use client";
-// import { auth } from "@/lib/auth";
-// import { headers } from "next/headers";
-// import { redirect } from "next/navigation";
+import { useState } from "react";
 import EditorPage from "@/components/dashboard/Editor";
-import LeftBar from "@/components/dashboard/LeftBar";
 import TaskMain from "@/components/dashboard/TaskMain";
-import ProgressComp from "@/components/dashboard/Progress";
 import Console from "@/components/dashboard/Console";
-import { useContext } from "react";
-import SidebarContext from "@/context/SidebarContext";
+import SidebarLayout from "@/components/dashboard/SidebarLayout";
 
 const Dashboard = () => {
-  const { isSidebarOpen } = useContext(SidebarContext)!;
+  const [output, setOutput] = useState("");
+  const [status, setStatus] = useState("");
 
-  // const session = await auth.api.getSession({
-  //   headers: await headers(),
-  // });
-
-  // if (!session) {
-  //   redirect("/signin");
-  // }
+  const handleOutputChange = (newOutput: string, newStatus: string) => {
+    setOutput(newOutput);
+    setStatus(newStatus);
+  };
 
   return (
-    <div>
-      <div>
-        <LeftBar />
-      </div>
-
-      <div
-        className={`grid grid-cols-1 lg:grid-cols-3 gap-4 transition-all duration-300 ease-in-out
-    ${isSidebarOpen ? "sm:ml-80" : "sm:ml-0"}
-  `}
-      >
-        <div className="lg:col-span-3">
-          <TaskMain />
-        </div>
-        <div className="lg:col-span-2">
-          <EditorPage />
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6 space-y-4">
+      <div className="flex items-center justify-between">
         <div>
-          <Console />
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            Dashboard
+          </p>
+          <h1 className="text-2xl font-semibold">Practice Workspace</h1>
         </div>
       </div>
+      <SidebarLayout>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 transition-all duration-300 ease-in-out">
+          <div className="lg:col-span-3">
+            <TaskMain />
+          </div>
+          <div className="lg:col-span-2">
+            <EditorPage onOutputChange={handleOutputChange} />
+          </div>
+          <div>
+            <Console output={output} status={status} />
+          </div>
+        </div>
+      </SidebarLayout>
     </div>
   );
 };

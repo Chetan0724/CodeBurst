@@ -1,11 +1,12 @@
 "use client";
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useState, useContext, useEffect, useMemo } from "react";
+import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
-import { useContext } from "react";
 import EditorContext from "@/context/EditorContext";
-import { useEffect } from "react";
+import { useTasks } from "@/hooks/useTasks";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 const boilerplates: Record<string, string> = {
   cpp: `#include <bits/stdc++.h>
@@ -25,7 +26,7 @@ main();`,
     print("Hello, World!")
 
 if __name__ == "__main__":
-    main()"`,
+    main()`,
 
   java: `public class Main {
     public static void main(String[] args) {
@@ -57,30 +58,105 @@ export const languageIds: Record<string, number> = {
   rust: 73,
 };
 
-const EditorPage = () => {
-  const [input, setInput] = useState("");
+interface EditorPageProps {
+  onOutputChange: (output: string, status: string) => void;
+}
 
-  const { language } = useContext(EditorContext)!;
+const EditorPage = ({ onOutputChange }: EditorPageProps) => {
+  const [input, setInput] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { language, currTaskId } = useContext(EditorContext)!;
+  const { data } = useTasks(language);
+  const queryClient = useQueryClient();
+
+  const allTasks = useMemo(
+    () => data?.pages.flatMap((page) => page.tasks) || [],
+    [data]
+  );
+
+  const currTask = allTasks.find((task) => task.taskId === currTaskId);
 
   useEffect(() => {
     setInput(boilerplates[language]);
   }, [language]);
 
   const handleSubmit = async () => {
-    const submitResponse = await fetch("/api/judge0/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        language_id: languageIds[language],
-        source_code: input,
-      }),
-    });
+    if (!currTask) {
+      toast.error("No task selected");
+      return;
+    }
 
-    const { token } = await submitResponse.json();
+    setIsSubmitting(true);
+    onOutputChange("", "running");
 
-    const statusResponse = await fetch(`/api/judge0/status/${token}`);
-    const data = await statusResponse.json();
-    console.log(data);
+    try {
+      const submitResponse = await fetch("/api/judge0/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          language_id: languageIds[language],
+          source_code: input,
+        }),
+      });
+
+      const { token } = await submitResponse.json();
+
+      let attempts = 0;
+      const maxAttempts = 10;
+
+      const checkStatus = async (): Promise<void> => {
+        const statusResponse = await fetch(`/api/judge0/status/${token}`);
+        const data = await statusResponse.json();
+
+        if (data.data.status.id <= 2 && attempts < maxAttempts) {
+          attempts++;
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          return checkStatus();
+        }
+
+        const output =
+          data.data.stdout ||
+          data.data.stderr ||
+          data.data.compile_output ||
+          "No output";
+        const status = data.data.status.description;
+
+        if (data.data.status.id === 3) {
+          const solutionResponse = await fetch("/api/submit-solution", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              taskId: currTaskId,
+              language,
+              output: data.data.stdout?.trim(),
+              expectedOutput: currTask.expectedOutput,
+            }),
+          });
+
+          const result = await solutionResponse.json();
+
+          if (result.isCorrect) {
+            toast.success(result.message);
+            queryClient.invalidateQueries({ queryKey: ["progress"] });
+            onOutputChange(output, "Accepted");
+          } else {
+            toast.error(result.message);
+            onOutputChange(output, "Wrong Answer");
+          }
+        } else {
+          onOutputChange(output, status);
+          toast.error(`Execution failed: ${status}`);
+        }
+      };
+
+      await checkStatus();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to submit code");
+      onOutputChange("Error occurred during submission", "error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -95,14 +171,15 @@ const EditorPage = () => {
           theme="vs-dark"
           language={language}
           options={{ minimap: { enabled: false } }}
-        ></Editor>
+        />
       </CardContent>
       <CardFooter>
         <Button
           className="dark:text-black dark:bg-white"
           onClick={handleSubmit}
+          disabled={isSubmitting}
         >
-          Run Code
+          {isSubmitting ? "Running..." : "Run Code"}
         </Button>
       </CardFooter>
     </Card>

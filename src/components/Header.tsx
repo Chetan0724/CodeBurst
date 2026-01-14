@@ -2,20 +2,18 @@
 import { ModeToggle } from "./ThemeToggle";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  IconLayoutSidebarLeftCollapse,
-  IconLayoutSidebarLeftExpand,
-} from "@tabler/icons-react";
+import { IconChevronRight, IconChevronLeft } from "@tabler/icons-react";
 import { useContext } from "react";
 import SidebarContext from "@/context/SidebarContext";
 import { usePathname } from "next/navigation";
 import ProfileDropdown from "./ProfileDropdown";
+import { authClient } from "@/lib/auth-client";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { Button } from "./ui/button";
 
 export function Header() {
   const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)!;
-  const auth = true;
+  const { data: session, isPending } = authClient.useSession();
   const pathname = usePathname();
 
   if (pathname === "/signin" || pathname === "/signup") {
@@ -32,18 +30,14 @@ export function Header() {
   }
 
   return (
-    <header className="bg-primarytwo w-full border-b flex justify-between px-4 py-5 sm:px-8 sticky top-0 z-50 h-13">
+    <header className="max-w-7xl mx-auto border-b bg-primarytwo w-full flex justify-between px-4 py-10 sm:px-8 sticky top-0 z-20 h-13">
       <div className="flex items-center gap-4">
         {pathname === "/dashboard" && (
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black rounded-full"
+            className="cursor-pointer bg-black text-white dark:bg-white dark:text-black rounded-full h-5 w-5 flex items-center justify-center"
           >
-            {isSidebarOpen ? (
-              <IconLayoutSidebarLeftCollapse stroke={2} className="p-0.5" />
-            ) : (
-              <IconLayoutSidebarLeftExpand stroke={2} className="p-0.5" />
-            )}
+            {isSidebarOpen ? <IconChevronLeft /> : <IconChevronRight />}
           </button>
         )}
 
@@ -64,15 +58,20 @@ export function Header() {
           />
         </Link>
       </div>
-      <div className="flex items-center gap-1">
-        {auth ? (
+      <div className="flex items-center gap-2">
+        {isPending ? null : session ? (
           <ProfileDropdown />
         ) : (
           <div className="space-x-4">
-            <Link href="/signin">Login</Link>
+            <Link
+              href="/signin"
+              className="font-medium text-primary hover:underline"
+            >
+              Login
+            </Link>
             <Link
               href="/signup"
-              className="bg-black text-white dark:bg-white dark:text-black px-1.5 py-0.5 rounded"
+              className="bg-primary text-white px-3 py-1 rounded-md font-medium hover:bg-primary/90 transition-colors"
             >
               Signup
             </Link>

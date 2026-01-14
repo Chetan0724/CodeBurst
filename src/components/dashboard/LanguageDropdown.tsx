@@ -11,12 +11,11 @@ import { useContext } from "react";
 import EditorContext from "@/context/EditorContext";
 
 const LanguageDropdown = () => {
-  const { language, setLanguage, setTasks, allTasks } =
-    useContext(EditorContext)!;
+  const { language, setLanguage, setCurrTaskId } = useContext(EditorContext)!;
 
   const handleValueChange = (value: string) => {
     setLanguage(value);
-    setTasks(allTasks.filter((task) => task.language === value));
+    setCurrTaskId(1);
   };
 
   return (

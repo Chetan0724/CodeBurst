@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -34,6 +33,7 @@ model Task {
   language       Language
   difficulty     Difficulty
   expectedOutput String
+  solutionCode   String?
   createdAt      DateTime     @default(now())
   solvedBy       SolvedTask[]
 
@@ -41,16 +41,17 @@ model Task {
 }
 
 model SolvedTask {
-  id        String   @id @default(uuid())
-  userId    String
-  taskId    String
-  language  Language
-  createdAt DateTime @default(now())
+  id       String   @id @default(uuid())
+  userId   String
+  taskId   String
+  language Language
+  solvedAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
   @@unique([userId, taskId, language])
+  @@index([userId, language])
 }
 
 enum Language {

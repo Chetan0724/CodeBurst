@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
   try {
-    const { token } = params;
+    const { token } = await params;
     const url = `${process.env.RAPIDAPI_BASE_URL}/submissions/${token}?base64_encoded=true&fields=*`;
     const options = {
       method: "GET",
